@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,8 +13,32 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+*/
+
+Route::get('articles', function () {
+    return Article::all();
+});
+
+Route::get('articles/{id}', function ($id) {
+    return Article::find($id);
+});
+
+Route::post('articles', function (Request $request) {
+    return Article::create($request->all());
+});
+
+Route::put('articles/{id}', function (Request $request, $id) {
+    $articles = Article::findOrFail($id);
+    $articles ->update($request->all());
+    return $articles;
+});
+
+Route::delete('articles/{id}', function ($id) {
+    $articles = Article::find($id)->delete();
+    return 204;
 });
