@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,28 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::get('articles', [ArticleController::class, 'index'])->name('article.index');
 */
 
-Route::get('articles', function () {
-    return Article::all();
-});
+Route::resource('articles', ArticleController::class)->names('articles');
 
-Route::get('articles/{id}', function ($id) {
-    return Article::find($id);
-});
-
-Route::post('articles', function (Request $request) {
-    return Article::create($request->all());
-});
-
-Route::put('articles/{id}', function (Request $request, $id) {
-    $articles = Article::findOrFail($id);
-    $articles ->update($request->all());
-    return $articles;
-});
-
-Route::delete('articles/{id}', function ($id) {
-    $articles = Article::find($id)->delete();
-    return 204;
-});
