@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Http\Resources\Article as ArticleResources;
+use App\Http\Resources\ArticleCollection;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -14,8 +16,11 @@ class ArticleController extends Controller
      */
     public function index()
     {   //return Article::all();
-        $article = Article::all();
-        return response()->json($article, 200);
+        //$article = Article::all();
+        //return response()->json($article, 200);
+
+        return new ArticleCollection(Article::paginate(6));
+
     }
 
     /**
@@ -36,8 +41,9 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {   //return Article::create($request->all());
-        $article = Article::create($request->all());
-        return response()->json($article, 201);
+        /*$article = Article::create($request->all());
+        return response()->json($article, 201);*/
+        return response()->json(Article::create($request->all()), 201);
     }
 
     /**
@@ -48,7 +54,8 @@ class ArticleController extends Controller
      */
     public function show(Article $article) //public function show($id)
     {   //return Article::find($article);
-        return $article;
+        //return new ArticleResources($article);
+        return response()->json(new ArticleResources($article), 200);
     }
 
     /**
