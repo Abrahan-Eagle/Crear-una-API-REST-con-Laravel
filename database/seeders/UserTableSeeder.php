@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,6 +26,18 @@ class UserTableSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        User::factory()->times(9)->create();
+      $users = User::factory()->times(4)->create();
+/*
+      $users->category()->saveMany(
+          $this->faker->randomElements(
+              array(
+                  Category::find(1),
+                  Category::find(2),
+                  Category::find(3),
+                ), $this->faker->numberBetween(1, 3), false
+            )
+        );
+        */
+
     }
 }

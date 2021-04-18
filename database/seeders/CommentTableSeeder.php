@@ -3,12 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\Comments;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Namshi\JOSE\JWS;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ArticleTableSeeder extends Seeder
+class CommentTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,15 +18,22 @@ class ArticleTableSeeder extends Seeder
      */
     public function run()
     {
-        //Article::truncate();
+        //Comments::truncate();
 
         $users = User::all();
+        $articles = Article::all();
 
         foreach ($users as $value) {
             JWTAuth::attempt(['email' => $value->email, 'password' => '123']);
-            Article::factory()->times(5)->create();
-        }
 
+            foreach ($articles as $value) {
+                Comments::create([
+                    'text' => 'hola mundo',
+                    'article_id' => $value->id
+                ]);
+            }
+
+        }
 
     }
 }
