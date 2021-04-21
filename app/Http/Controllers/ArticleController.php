@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    private static $rules = [
+        'title'=> 'required|string|unique:articles|max:255',
+        'body'=> 'required'
+    ];
+
+    private static $errorMessages = [
+        'require'=>'El campo :atributo es obligatorio',
+        'body.require'=>'Se requiere el body',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -43,6 +53,19 @@ class ArticleController extends Controller
     {   //return Article::create($request->all());
         /*$article = Article::create($request->all());
         return response()->json($article, 201);*/
+/*
+        $messages = [
+            'require'=>'El campo :atributo es obligatorio',
+            'body.require'=>'Se requiere el body',
+        ];
+
+        $validatedData = $request->validate([
+            'title'=> 'required|string|unique:articles|max:255',
+            'body'=> 'required'
+        ], $messages );
+    */
+
+        $validatedData = $request->validate(self::$rules, self::$errorMessages);
         return response()->json(Article::create($request->all()), 201);
     }
 
