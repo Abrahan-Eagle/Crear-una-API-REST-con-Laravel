@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Comments;
 use App\Http\Resources\Article as ArticleResources;
 use App\Http\Resources\ArticleCollection;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    private static $rules = [
+
+ /*   private static $rules = [
         'title'=> 'required|string|unique:articles|max:255',
-        'body'=> 'required'
+        'body'=> 'required',
+        'category_id'=>'required|exists:categories,id'
     ];
 
     private static $errorMessages = [
         'require'=>'El campo :atributo es obligatorio',
         'body.require'=>'Se requiere el body',
     ];
-
+*/
     /**
      * Display a listing of the resource.
      *
@@ -64,8 +67,14 @@ class ArticleController extends Controller
             'body'=> 'required'
         ], $messages );
     */
+    //$validatedData = $request->validate(self::$rules, self::$errorMessages);
 
-        $validatedData = $request->validate(self::$rules, self::$errorMessages);
+        $validateData = $request->validate([
+            'title'=> 'required|string|unique:articles|max:255',
+            'body'=> 'required',
+            'category_id'=>'required|exists:categories,id'
+            ]);
+
         return response()->json(Article::create($request->all()), 201);
     }
 
@@ -101,6 +110,13 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article) //public function update(Request $request, $id)
     {   //return $articles = Article::findOrFail($id)->update($request->all());
+
+        $validateData= $request->validate([
+            'title'=> 'required|string|unique:articles|max:255',
+            'body'=> 'required',
+            'category_id'=>'required|exists:categories,title,'.$article->id.'|max:255',
+            ]);
+
         $article -> update($request->all());
         return response()->json($article, 200);
     }
