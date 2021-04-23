@@ -72,10 +72,19 @@ class ArticleController extends Controller
         $validateData = $request->validate([
             'title'=> 'required|string|unique:articles|max:255',
             'body'=> 'required',
-            'category_id'=>'required|exists:categories,id'
+            'category_id'=>'required|exists:categories,id',
+            'image' => 'required|image|dimensions:min_width=500,min_height=500',
             ]);
 
-        return response()->json(Article::create($request->all()), 201);
+
+
+            $article = new Article($request->all());
+            $path = $request->image->store('public/articles');
+            //$path = $request->image->storeAs('public/articles', $request->user()->id . '_' . $article->title . '.' . $request->image->extension());
+            $article->image = $path;
+            $article->save();
+
+        return response()->json(new ArticleResources($article), 201);
     }
 
     /**
