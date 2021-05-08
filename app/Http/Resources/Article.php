@@ -18,6 +18,9 @@ class Article extends JsonResource
             'id'         => $this->id,
             'title'      => $this->title,
             'body'       => $this->body,
+            'user'    => '/api/users/' . $this->user_id,
+            'category'=> '/api/category/' . $this->category_id,
+            'image'      => $this->image,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             //-------------------------------------------------
@@ -27,8 +30,7 @@ class Article extends JsonResource
             //'user'    => User::find($this->user_id),
             //'category'=> Category::find($this->category_id),
             //-------------------------------------------------
-            'user'    => '/api/users/' . $this->user_id,
-            'category'=> '/api/category/' . $this->category_id,
+
         ];
     }
 }
